@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="textHeading"> #abc99d</color>
+    <color name="ulGreen">#00FF00</color>
 </resources>
