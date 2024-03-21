@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "531496572050",
+    "project_id": "ul-thrift",
+    "storage_bucket": "ul-thrift.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:531496572050:android:b59923c4e8b006b8f6c24b",
+        "android_client_info": {
+          "package_name": "ie.ul.ulthrift"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm18HdCxkwXTlHe_u_PzsdYVl9rZRSjxQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
