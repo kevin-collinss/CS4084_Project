@@ -1,4 +1,4 @@
-package ie.ul.ulthrift;
+package ie.ul.ulthrift.adaptors;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
+
+import ie.ul.ulthrift.R;
+
 public class SliderAdapter extends PagerAdapter{
 
     Context context;

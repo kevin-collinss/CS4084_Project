@@ -1,4 +1,4 @@
-package ie.ul.ulthrift;
+package ie.ul.ulthrift.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -19,6 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ie.ul.ulthrift.R;
 
 public class RegistrationActivity extends AppCompatActivity {
     EditText name, email, password;

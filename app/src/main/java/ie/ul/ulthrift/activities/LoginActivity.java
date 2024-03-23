@@ -1,4 +1,4 @@
-package ie.ul.ulthrift;
+package ie.ul.ulthrift.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ie.ul.ulthrift.R;
 
 public class LoginActivity extends AppCompatActivity {
     EditText  email, password;
@@ -87,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 if (task.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
                                 }   else {
                                 Toast.makeText(LoginActivity.this, "Login Failed"+task.getException(), Toast.LENGTH_SHORT).show();
@@ -100,6 +102,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signup(View view) {
-        startActivity(new Intent(LoginActivity.this,RegistrationActivity.class));
+        startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
     }
 }

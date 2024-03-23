@@ -1,4 +1,4 @@
-package ie.ul.ulthrift;
+package ie.ul.ulthrift.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,7 +14,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Objects;
+import ie.ul.ulthrift.R;
+import ie.ul.ulthrift.adaptors.SliderAdapter;
 
 public class OnBoardingActivity extends AppCompatActivity {
 
@@ -47,7 +47,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(OnBoardingActivity.this,RegistrationActivity.class));
+                startActivity(new Intent(OnBoardingActivity.this, RegistrationActivity.class));
                 finish();
             }
         });
