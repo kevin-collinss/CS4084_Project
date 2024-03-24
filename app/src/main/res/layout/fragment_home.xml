@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/new_product_name"
                     android:layout_marginLeft="9dp"
-                    android:text="We provide best products." />
+                    android:text="New products recently added" />
 
                 <TextView
                     android:id="@+id/newProducts_see_all"
@@ -89,7 +89,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginRight="8dp"
                     android:fontFamily="@font/amethysta"
-                    android:text="See All"
+                    android:text="View All"
                     android:textColor="@color/brown"
                     android:textSize="18sp"
                     android:textStyle="bold" />
