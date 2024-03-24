@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -116,7 +117,7 @@ public class HomeFragment extends Fragment {
                 });
 
         //New Products
-        newProductsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL,false));
+        newProductsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         newProductsModelList = new ArrayList<>();
         newProductsAdaptor = new NewProductsAdaptor(getContext(),newProductsModelList);
         newProductsRecyclerView.setAdapter(newProductsAdaptor);
