@@ -52,21 +52,21 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rec_category"
             android:layout_width="wrap_content"
-            android:layout_height="90dp"
+            android:layout_height="130dp"
             android:layout_marginStart="9dp"
             android:layout_marginTop="10dp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_marginTop="10dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="15dp"
             android:elevation="6dp"
             app:cardCornerRadius="5dp" >
-            
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
                 <RelativeLayout
@@ -88,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/new_product_name"
                         android:layout_marginStart="9dp"
-                        android:text="New Products" />
+                        android:text="New products added recently!" />
 
                     <TextView
                         android:id="@+id/newProducts_see_all"
@@ -112,56 +112,6 @@
                     android:padding="5dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-        
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-            
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/popular_products"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="9dp"
-                    android:fontFamily="@font/amethysta"
-                    android:text="Popular Products"
-                    android:textSize="21sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/popular_products"
-                    android:layout_marginStart="9dp"
-                    android:text="Popular Products" />
-
-                <TextView
-                    android:id="@+id/popular_see_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="8dp"
-                    android:fontFamily="@font/amethysta"
-                    android:text="View All"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/popular_rec"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="7dp"
-                android:layout_marginTop="6dp"
-                android:padding="5dp"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 

@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment {
         ImageSlider imageSlider = root.findViewById(R.id.image_slider);
         List<SlideModel> slideModels = new ArrayList<>();
 
-        slideModels.add(new SlideModel(R.drawable.shoes, "Discount on Shoes", ScaleTypes.CENTER_CROP));
+        slideModels.add(new SlideModel(R.drawable.shoes, "Shoes", ScaleTypes.CENTER_CROP));
         slideModels.add(new SlideModel(R.drawable.mens_clothing, "Mens Clothing", ScaleTypes.CENTER_CROP));
         slideModels.add(new SlideModel(R.drawable.womens_clothing, "Womens Clothing", ScaleTypes.CENTER_CROP));
 
