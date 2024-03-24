@@ -1,5 +1,6 @@
 package ie.ul.ulthrift.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,7 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -33,6 +34,8 @@ import ie.ul.ulthrift.models.NewProductsModel;
 
 public class HomeFragment extends Fragment {
 
+    LinearLayout linearLayout;
+    ProgressDialog progressDialog;
     RecyclerView catRecyclerview, newProductsRecyclerView;
 
     //Category recyclerview
@@ -59,10 +62,14 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+        progressDialog = new ProgressDialog(getActivity());
         catRecyclerview = root.findViewById(R.id.rec_category);
         newProductsRecyclerView = root.findViewById(R.id.new_product_rec);
 
         db = FirebaseFirestore.getInstance();
+
+        linearLayout = root.findViewById(R.id.home_layout);
+        linearLayout.setVisibility(View.GONE);
 
 
         //Image slider
@@ -74,6 +81,10 @@ public class HomeFragment extends Fragment {
         slideModels.add(new SlideModel(R.drawable.shoes, "Shoes", ScaleTypes.CENTER_CROP));
 
         imageSlider.setImageList(slideModels);
+
+        progressDialog.setTitle("Welcome To UL Thrifts");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
         //Category
         catRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL,false));
@@ -91,6 +102,8 @@ public class HomeFragment extends Fragment {
                             CategoryModel categoryModel = document.toObject(CategoryModel.class);
                             categoryModelList.add(categoryModel);
                             categoryAdaptor.notifyDataSetChanged();
+                            linearLayout.setVisibility(View.VISIBLE);
+                            progressDialog.dismiss();
                             Log.d("FireStore", document.getId() + " => " + document.getData());
                         }
                     }
