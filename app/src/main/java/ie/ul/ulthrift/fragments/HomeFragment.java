@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -26,15 +27,21 @@ import java.util.List;
 
 import ie.ul.ulthrift.R;
 import ie.ul.ulthrift.adaptors.CategoryAdaptor;
+import ie.ul.ulthrift.adaptors.NewProductsAdaptor;
 import ie.ul.ulthrift.models.CategoryModel;
+import ie.ul.ulthrift.models.NewProductsModel;
 
 public class HomeFragment extends Fragment {
 
-    RecyclerView catRecyclerview;
+    RecyclerView catRecyclerview, newProductsRecyclerView;
 
     //Category recyclerview
     CategoryAdaptor categoryAdaptor;
     List<CategoryModel> categoryModelList;
+
+    //New Products Recyclerview
+    NewProductsAdaptor newProductsAdaptor;
+    List<NewProductsModel> newProductsModelList;
 
     //FireStore
     FirebaseFirestore db;
@@ -51,7 +58,9 @@ public class HomeFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
         catRecyclerview = root.findViewById(R.id.rec_category);
+        newProductsRecyclerView = root.findViewById(R.id.new_product_rec);
 
         db = FirebaseFirestore.getInstance();
 
@@ -93,7 +102,31 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
+        //New Products
+        newProductsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.HORIZONTAL,false));
+        newProductsModelList = new ArrayList<>();
+        newProductsAdaptor = new NewProductsAdaptor(getContext(),newProductsModelList);
+        newProductsRecyclerView.setAdapter(newProductsAdaptor);
 
+        db.collection("NewProducts")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            NewProductsModel newProductsModel = document.toObject(NewProductsModel.class);
+                            newProductsModelList.add(newProductsModel);
+                            newProductsAdaptor.notifyDataSetChanged();
+                            Log.d("FireStore", document.getId() + " => " + document.getData());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firestore", "Error getting documents.", e);
+                    }
+                });
 
 
         return root;
