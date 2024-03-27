@@ -1,6 +1,8 @@
 package ie.ul.ulthrift.models;
 
-public class NewProductsModel {
+import java.io.Serializable;
+
+public class NewProductsModel implements Serializable {
 
     String description, name, rating, img_url;
     int price;

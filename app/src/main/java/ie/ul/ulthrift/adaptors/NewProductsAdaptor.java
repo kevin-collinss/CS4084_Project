@@ -2,6 +2,7 @@ package ie.ul.ulthrift.adaptors;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import ie.ul.ulthrift.R;
+import ie.ul.ulthrift.activities.DetailedActivity;
 import ie.ul.ulthrift.models.NewProductsModel;
 
 public class NewProductsAdaptor extends RecyclerView.Adapter<NewProductsAdaptor.ViewHolder> {
@@ -39,6 +41,15 @@ public class NewProductsAdaptor extends RecyclerView.Adapter<NewProductsAdaptor.
         Glide.with(context).load(list.get(position).getImg_url()).into(holder.newImg);
         holder.newName.setText(list.get(position).getName());
         holder.newPrice.setText(String.valueOf(list.get(position).getPrice()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailedActivity.class);
+                intent.putExtra("detailed",list.get(position));
+            context.startActivity(intent);
+            }
+        });
     }
 
     @Override
