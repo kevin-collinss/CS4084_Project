@@ -2,6 +2,7 @@ package ie.ul.ulthrift.fragments;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ie.ul.ulthrift.R;
+import ie.ul.ulthrift.activities.ShowAllActivity;
 import ie.ul.ulthrift.adaptors.CategoryAdaptor;
 import ie.ul.ulthrift.adaptors.NewProductsAdaptor;
 import ie.ul.ulthrift.models.CategoryModel;
@@ -36,6 +39,7 @@ import ie.ul.ulthrift.models.NewProductsModel;
 
 public class HomeFragment extends Fragment {
 
+    TextView catShowAll,newProductShowAll;
     LinearLayout linearLayout;
     AlertDialog progressDialog;
     RecyclerView catRecyclerview, newProductsRecyclerView;
@@ -69,6 +73,27 @@ public class HomeFragment extends Fragment {
         progressDialog = builder.create();
         catRecyclerview = root.findViewById(R.id.rec_category);
         newProductsRecyclerView = root.findViewById(R.id.new_product_rec);
+
+        catShowAll = root.findViewById(R.id.category_see_all);
+        newProductShowAll = root.findViewById(R.id.newProducts_see_all);
+
+        catShowAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ShowAllActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        newProductShowAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ShowAllActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
         db = FirebaseFirestore.getInstance();
 

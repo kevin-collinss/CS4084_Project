@@ -1,6 +1,5 @@
 package ie.ul.ulthrift.adaptors;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -18,14 +17,14 @@ import java.util.List;
 
 import ie.ul.ulthrift.R;
 import ie.ul.ulthrift.activities.DetailedActivity;
-import ie.ul.ulthrift.models.NewProductsModel;
+import ie.ul.ulthrift.models.ShowAllModel;
 
-public class NewProductsAdaptor extends RecyclerView.Adapter<NewProductsAdaptor.ViewHolder> {
+public class ShowAllAdapter extends RecyclerView.Adapter<ShowAllAdapter.ViewHolder>{
 
     private Context context;
-    private List<NewProductsModel> list;
+    private List<ShowAllModel> list;
 
-    public NewProductsAdaptor(Context context, List<NewProductsModel> list) {
+    public ShowAllAdapter(Context context, List<ShowAllModel> list) {
         this.context = context;
         this.list = list;
     }
@@ -33,14 +32,15 @@ public class NewProductsAdaptor extends RecyclerView.Adapter<NewProductsAdaptor.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.new_products, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.show_all_item,parent,false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(context).load(list.get(position).getImg_url()).into(holder.newImg);
-        holder.newName.setText(list.get(position).getName());
-        holder.newPrice.setText(String.valueOf(list.get(position).getPrice()));
+
+        Glide.with(context).load(list.get(position).getImg_url()).into(holder.mItemImage);
+        holder.mCost.setText("€" + list.get(position).getPrice());
+        holder.mName.setText(list.get(position).getName());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,14 +59,17 @@ public class NewProductsAdaptor extends RecyclerView.Adapter<NewProductsAdaptor.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView newImg;
-        TextView newName, newPrice;
+        private ImageView mItemImage;
+        private TextView mCost;
+        private TextView mName;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            newImg = itemView.findViewById(R.id.new_img);
-            newName = itemView.findViewById(R.id.new_product_name);
-            newPrice = itemView.findViewById(R.id.new_price);
+            mItemImage = itemView.findViewById(R.id.item_image);
+            mCost = itemView.findViewById(R.id.item_cost);
+            mName = itemView.findViewById(R.id.item_name);
         }
     }
+
 }

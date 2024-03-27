@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import ie.ul.ulthrift.R;
 import ie.ul.ulthrift.adaptors.NewProductsAdaptor;
 import ie.ul.ulthrift.models.NewProductsModel;
+import ie.ul.ulthrift.models.ShowAllModel;
 
 public class DetailedActivity extends AppCompatActivity {
 
@@ -26,6 +27,9 @@ public class DetailedActivity extends AppCompatActivity {
 
     // New Products
     NewProductsModel newProductsModel = null;
+
+    // Show All
+    ShowAllModel showAllModel = null;
     private FirebaseFirestore firestore;
 
 
@@ -46,6 +50,8 @@ public class DetailedActivity extends AppCompatActivity {
 
         if (obj instanceof NewProductsModel){
             newProductsModel =  (NewProductsModel) obj;
+        } else if (obj instanceof ShowAllModel) {
+            showAllModel = (ShowAllModel) obj;
         }
 
         detailedImg = findViewById(R.id.detailed_img);
@@ -67,5 +73,14 @@ public class DetailedActivity extends AppCompatActivity {
             name.setText(newProductsModel.getName());
         }
 
+        //Show All Products
+        if (showAllModel != null); {
+            Glide.with(getApplicationContext()).load(showAllModel.getImg_url()).into(detailedImg);
+            name.setText(showAllModel.getName());
+            rating.setText(showAllModel.getRating());
+            description.setText(showAllModel.getDescription());
+            price.setText(String.valueOf(showAllModel.getPrice()));
+            name.setText(showAllModel.getName());
+        }
     }
 }

@@ -15,11 +15,14 @@
         android:theme="@style/Theme.UlThrift"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ShowAllActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.DetailedActivity"
             android:exported="false" />
         <activity
             android:name=".activities.OnBoardingActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".activities.LoginActivity"
             android:exported="false" />
