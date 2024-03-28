@@ -1,5 +1,6 @@
 package ie.ul.ulthrift.adaptors;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -36,7 +37,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder , @SuppressLint("RecyclerView") int position) {
 
         Glide.with(context).load(list.get(position).getImg_url()).into(holder.catImg);
         holder.catName.setText(list.get(position).getName());
