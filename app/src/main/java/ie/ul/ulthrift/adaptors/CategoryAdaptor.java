@@ -1,6 +1,7 @@
 package ie.ul.ulthrift.adaptors;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import ie.ul.ulthrift.R;
+import ie.ul.ulthrift.activities.ShowAllActivity;
 import ie.ul.ulthrift.models.CategoryModel;
 
 public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.ViewHolder> {
@@ -38,6 +40,15 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.ViewHo
 
         Glide.with(context).load(list.get(position).getImg_url()).into(holder.catImg);
         holder.catName.setText(list.get(position).getName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ShowAllActivity.class);
+                intent.putExtra("type", list.get(position).getType());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

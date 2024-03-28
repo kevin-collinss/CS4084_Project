@@ -43,6 +43,8 @@ public class ShowAllActivity extends AppCompatActivity {
             return insets;
         });
 
+        String type = getIntent().getStringExtra("type");
+
         firestore = FirebaseFirestore.getInstance();
         recyclerView = findViewById(R.id.show_all_rec);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -50,22 +52,66 @@ public class ShowAllActivity extends AppCompatActivity {
         showAllAdapter = new ShowAllAdapter(this,showAllModelList);
         recyclerView.setAdapter(showAllAdapter);
 
-        firestore.collection("ShowAll")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+        if (type == null || type.isEmpty()){
 
-                        if (task.isSuccessful()){
-                            for (DocumentSnapshot doc :task.getResult().getDocuments()){
+            firestore.collection("ShowAll")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                                ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
-                                showAllModelList.add(showAllModel);
-                                showAllAdapter.notifyDataSetChanged();
+                            if (task.isSuccessful()){
+                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+
+                                    ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
+                                    showAllModelList.add(showAllModel);
+                                    showAllAdapter.notifyDataSetChanged();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        }
+
+        if (type != null && type.equalsIgnoreCase("men")){
+
+            firestore.collection("ShowAll").whereEqualTo("type" , "men")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                            if (task.isSuccessful()){
+                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+
+                                    ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
+                                    showAllModelList.add(showAllModel);
+                                    showAllAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    });
+        }
+
+        if (type != null && type.equalsIgnoreCase("women")){
+
+            firestore.collection("ShowAll").whereEqualTo("type" , "women")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                            if (task.isSuccessful()){
+                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+
+                                    ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
+                                    showAllModelList.add(showAllModel);
+                                    showAllAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    });
+        }
+
 
     }
 }
