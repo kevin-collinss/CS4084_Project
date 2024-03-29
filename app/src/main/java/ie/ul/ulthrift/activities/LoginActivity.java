@@ -22,13 +22,16 @@ import java.util.regex.Pattern;
 import ie.ul.ulthrift.R;
 
 public class LoginActivity extends AppCompatActivity {
+    // Declares the  email and password variables so we can put inputs to them
     EditText  email, password;
+    // Firebase instance to authenticate user
     private FirebaseAuth auth;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Sets the content view for this activity
         setContentView(R.layout.activity_login);
 
         ActionBar actionBar = getSupportActionBar();
@@ -36,12 +39,15 @@ public class LoginActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
+        // creates firebase authentication instance
         auth = FirebaseAuth.getInstance();
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
     }
 
+    // Called when the user clicks the sign-in button
     public void signin(View view) {
+        // Gets user inputs
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
 
@@ -82,16 +88,20 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+        // Attempts to sign in with Firebase Auth
         auth.signInWithEmailAndPassword(userEmail, userPassword)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            // Checks if the sign-in was successful
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
 
                                 if (task.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                    // Redirects to the MainActivity upon successful login
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
                                 }   else {
+                                    //Shows login failed toast error
                                 Toast.makeText(LoginActivity.this, "Login Failed"+task.getException(), Toast.LENGTH_SHORT).show();
 
                             }
@@ -101,6 +111,8 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
+    // Redirects to RegistrationActivity when the user clicks the sign up buttoon
     public void signup(View view) {
         startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
     }

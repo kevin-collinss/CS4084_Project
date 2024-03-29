@@ -61,11 +61,18 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void signup(View view) {
 
+        // Declares the name, email and password variables so we can put inputs to them
         String userName = name.getText().toString();
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
 
-        //Check if username is empty
+        // Checks if email format is correct and ends with @studentmail.ul.ie
+        if (!userEmail.endsWith("@studentmail.ul.ie")) {
+            Toast.makeText(this, "Email must be a UL student email (are you sure you're a UL stundet?", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check if username is empty
         if (TextUtils.isEmpty(userName)) {
 
             Toast.makeText(this, "Enter Name!", Toast.LENGTH_SHORT).show();
@@ -100,18 +107,23 @@ public class RegistrationActivity extends AppCompatActivity {
             Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\",.<>?]).*$");
             Matcher matcher = pattern.matcher(userPassword);
 
+            //Error message for if password does not meet criteria
             if (!matcher.matches()) {
                 Toast.makeText(this, "Password must contain a capital letter and a special character", Toast.LENGTH_SHORT).show();
             }
 
         }
 
+
+
+        // Attempts to create a user account with Firebase Auth using the provided email and password
         auth.createUserWithEmailAndPassword(userEmail, userPassword)
                 .addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
+
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
-
+                        // if the registration is successful, display that they registered, otherwise display it failed
                         if (task.isSuccessful()) {
                             Toast.makeText(RegistrationActivity.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
@@ -125,8 +137,9 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-        public void signin (View view){
+    // Redirects to LoginActivity when the user clicks the sign in button
+    public void signin (View view){
             startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
-        }
+    }
 
 }
