@@ -37,7 +37,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder , @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder , int position) {
 
         Glide.with(context).load(list.get(position).getImg_url()).into(holder.catImg);
         holder.catName.setText(list.get(position).getName());
@@ -46,7 +46,7 @@ public class CategoryAdaptor extends RecyclerView.Adapter<CategoryAdaptor.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ShowAllActivity.class);
-                intent.putExtra("type", list.get(position).getType());
+                intent.putExtra("type", list.get(holder.getAdapterPosition()).getType());
                 context.startActivity(intent);
             }
         });

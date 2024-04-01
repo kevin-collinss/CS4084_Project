@@ -43,12 +43,11 @@ public class NewProductsAdaptor extends RecyclerView.Adapter<NewProductsAdaptor.
         holder.newName.setText(list.get(position).getName());
         holder.newPrice.setText(String.valueOf(list.get(position).getPrice()));
 
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent intent = new Intent(context, DetailedActivity.class);
-                intent.putExtra("detailed",list.get(holder.getLayoutPosition()));
+                intent.putExtra("detailed",list.get(holder.getAdapterPosition()));
                 context.startActivity(intent);
             }
         });
