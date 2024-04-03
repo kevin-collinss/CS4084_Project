@@ -23,7 +23,7 @@ public class DetailedActivity extends AppCompatActivity {
 
     ImageView detailedImg;
     TextView rating, name, description, price;
-    Button addToFavourites, buyNow;
+    Button addToFavourites, messageSeller;
 
     // New Products
     NewProductsModel newProductsModel = null;
@@ -36,13 +36,7 @@ public class DetailedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_detailed);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         firestore = FirebaseFirestore.getInstance();
 
@@ -61,10 +55,10 @@ public class DetailedActivity extends AppCompatActivity {
         price =  findViewById(R.id.detailed_price);
 
         addToFavourites = findViewById(R.id.add_to_favourites);
-        buyNow = findViewById(R.id.buy_now);
+        messageSeller = findViewById(R.id.message_seller);
 
         //New Products
-        if (newProductsModel != null); {
+        if (newProductsModel != null) {
             Glide.with(getApplicationContext()).load(newProductsModel.getImg_url()).into(detailedImg);
             name.setText(newProductsModel.getName());
             rating.setText(newProductsModel.getRating());
@@ -74,7 +68,7 @@ public class DetailedActivity extends AppCompatActivity {
         }
 
         //Show All Products
-        if (showAllModel != null); {
+        if (showAllModel != null) {
             Glide.with(getApplicationContext()).load(showAllModel.getImg_url()).into(detailedImg);
             name.setText(showAllModel.getName());
             rating.setText(showAllModel.getRating());

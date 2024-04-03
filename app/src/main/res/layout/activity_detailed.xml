@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.DetailedActivity">
@@ -37,21 +38,21 @@
             android:orientation="vertical"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp">
-            
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:fontFamily="@font/amethysta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/detailed_name"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
+                    android:layout_width="208dp"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/amethysta"
                     android:text="Product Name"
                     android:textColor="@color/black"
-                    android:layout_marginTop="5dp"/>
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/rating"
@@ -63,7 +64,7 @@
                     android:layout_toStartOf="@+id/my_rating"
                     android:textSize="16sp"
                     android:layout_marginTop="9dp"
-                    android:layout_marginRight="2dp"/>
+                    android:layout_marginEnd="2dp"/>
 
                 <RatingBar
                     android:id="@+id/my_rating"
@@ -74,7 +75,7 @@
                     android:numStars="5"
                     android:stepSize="0.1"
                     style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentEnd="true"/>
 
             </RelativeLayout>
 
@@ -134,37 +135,34 @@
         android:id="@+id/add_to_favourites"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="4dp"
+        android:drawableLeft="@drawable/heart_svg"
         android:padding="14dp"
         android:text="Add to Favourites"
         android:textAllCaps="false"
         android:textSize="20dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/message_seller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardview"
-        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_percent=".8" />
 
     <Button
-        android:id="@+id/buy_now"
+        android:id="@+id/message_seller"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/textHeading"
+        android:drawableLeft="@drawable/message_svg"
         android:drawableTint="@color/white"
         android:padding="14dp"
-        android:text="Buy Now"
+        android:text="Message Seller"
         android:textAllCaps="false"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardview"
-        app:layout_constraintVertical_bias="0.96"
         app:layout_constraintWidth_percent=".8" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
