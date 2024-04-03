@@ -3,7 +3,7 @@
     <style name="Base.Theme.UlThrift" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">#ccb6a1</item>
+        <item name="colorPrimary">#F5F5DC</item>
         <item name="colorPrimaryVariant">#abc99d</item>
 
     </style>
