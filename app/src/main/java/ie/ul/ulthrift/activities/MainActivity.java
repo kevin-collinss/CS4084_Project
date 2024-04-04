@@ -1,8 +1,11 @@
 package ie.ul.ulthrift.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -11,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -24,8 +28,13 @@ public class MainActivity extends AppCompatActivity {
     //Used for signing out
     FirebaseAuth auth;
 
-    //Toolbar variable to show our navabr in nav_bar.xml (menu)
+    //Toolbar variable to show our navbar in nav_bar.xml (menu)
     Toolbar navBar;
+
+    //these used for our sidebar
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle toggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,41 @@ public class MainActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         //Loading the HomeFragment
         loadFragment(homeFragment);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        // Setting up the toggle
+        toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, navBar, R.string.nav_drawer_open, R.string.nav_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            // Handle navigation view item clicks here.
+            int id = item.getItemId();
+
+            if (id == R.id.home_nav_bar) {
+                loadFragment(homeFragment);
+            }
+            else if (id == R.id.nav_list_item) {
+                // TODO list item
+            } else if (id == R.id.nav_messages) {
+                // TODO messages page
+            } else if (id == R.id.nav_view_all_items) {
+                Intent intent = new Intent(MainActivity.this, ShowAllActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.nav_view_all_men) {
+                //TODO view all men
+                Intent intent = new Intent(MainActivity.this, ShowAllActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.nav_view_all_women) {
+                //TODO view all women
+            }
+
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        });
     }
 
     @Override
