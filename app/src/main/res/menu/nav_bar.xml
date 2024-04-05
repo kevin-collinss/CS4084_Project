@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+
+        android:id="@+id/nav_bar_logo"
+        android:title="Custom View"
+        app:showAsAction="always"
+        app:actionLayout="@layout/nav_bar_logo" />
+
+        <item
+            android:id="@+id/nav_bar_logout"
+            android:title="Logout"
+            android:icon="@drawable/logout"
+
+            app:showAsAction="always"/>
+
+
+
+
+
+    </menu>
+
+
+
+
+
