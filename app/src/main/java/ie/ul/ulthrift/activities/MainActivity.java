@@ -11,12 +11,19 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Firebase;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import ie.ul.ulthrift.R;
 import ie.ul.ulthrift.fragments.HomeFragment;
@@ -27,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
 
     //Used for signing out
     FirebaseAuth auth;
+
+    //need for handling firestore reference to new collection so can run a cleanup
+    FirebaseFirestore firestore;
 
     //Toolbar variable to show our navbar in nav_bar.xml (menu)
     Toolbar navBar;
@@ -59,12 +69,19 @@ public class MainActivity extends AppCompatActivity {
         //Loading the HomeFragment
         loadFragment(homeFragment);
 
+
+
+        //Get fire store instance
+        firestore = FirebaseFirestore.getInstance();
+
+        //remove new products called
+        removeNewProducts();
+
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
         // Setting up the toggle
-        toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, navBar, R.string.nav_drawer_open, R.string.nav_drawer_close);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, navBar, R.string.nav_drawer_open, R.string.nav_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -92,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
+
+
     }
 
     @Override
@@ -120,5 +139,38 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.home_container,homeFragment);
         transaction.commit();
+    }
+
+    /*
+    method checks when the main activity is launched if there are products on the new collection
+    are more than 2 days since they have been listed. If they are it removes them from collection
+
+    */
+
+
+    private void removeNewProducts() {
+        Date twoDaysAgo = getTwoDaysAgo();
+
+        firestore.collection("NewProducts")
+                .whereLessThanOrEqualTo("addDate", new Timestamp(twoDaysAgo))
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            document.getReference().delete() // Delete the document if it hits the date check
+                                    .addOnSuccessListener(aVoid -> Log.d("Cleanup", "Document deleted successfully"))
+                                    .addOnFailureListener(e -> Log.e("Cleanup", "Error deleting document", e)); //log messages for logcat
+                        }
+                    } else {
+                        Log.e("Cleanup", "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
+    //Gets the current date of the user when they are logged in
+    private Date getTwoDaysAgo() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -2);
+        return calendar.getTime();
     }
 }

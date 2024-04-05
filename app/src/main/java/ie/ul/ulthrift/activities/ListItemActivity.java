@@ -14,12 +14,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -145,6 +147,10 @@ public class ListItemActivity extends AppCompatActivity {
             // Parse the price input
             itemPrice = Double.parseDouble(priceString);
 
+            //Get date of upload of item
+            Timestamp addDate = new Timestamp(new Date());
+
+
             // Create a Map to store the values of the items
             Map<String, Object> item = new HashMap<>();
             item.put("name", itemName);
@@ -152,12 +158,14 @@ public class ListItemActivity extends AppCompatActivity {
             item.put("price", itemPrice);
             item.put("type", itemCategory);
             item.put("img_url", itemImageUrl);
+            item.put("addDate", addDate);
 
             // Add a new document with a generated ID to the "ShowAll" collection
             db.collection("ShowAll")
                     .add(item)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(this, "Item added successfully", Toast.LENGTH_SHORT).show();
+                        addToNewProducts(item);
                         // Navigate back to the homepage
                         finish();
                     })
@@ -168,7 +176,23 @@ public class ListItemActivity extends AppCompatActivity {
             // Handle input validation failure
             Toast.makeText(this, "Please fill in all the fields correctly.", Toast.LENGTH_SHORT).show();
         }
+
+
     }
+
+    private void addToNewProducts(Map<String, Object> item) {
+        // Add the same item to 'NewProducts' collection
+        db.collection("NewProducts")
+                .add(item)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "Item also added to new products", Toast.LENGTH_SHORT).show();
+                    // Redirect or close activity as required
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to add item to new products: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
 
     private boolean validateInputs(String name, String description, String price, String category) {
         // Basic checks to make sure each input contains something

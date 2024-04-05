@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- res/layout/custom_action_view.xml -->
+
     <ImageView
         android:id="@+id/image_view_custom_action"
         android:layout_width="266dp"
