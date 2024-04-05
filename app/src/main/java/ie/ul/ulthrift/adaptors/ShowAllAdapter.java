@@ -28,6 +28,15 @@ public class ShowAllAdapter extends RecyclerView.Adapter<ShowAllAdapter.ViewHold
         this.context = context;
         this.list = list;
     }
+    /*
+    method for updating lists of products, so it clears the list, add the new items
+    based of what list it is and then notifys the adapter to re render the list
+    */
+    public void updateList(List<ShowAllModel> newList) {
+        list.clear();
+        list.addAll(newList);
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override

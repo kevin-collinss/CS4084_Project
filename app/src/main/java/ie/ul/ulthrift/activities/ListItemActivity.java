@@ -14,12 +14,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,7 +126,7 @@ public class ListItemActivity extends AppCompatActivity {
 
     private void setupSpinner() {
         // Creates and ArrayAdapter with the categories we defined (men, women)
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories_display_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
@@ -138,12 +140,32 @@ public class ListItemActivity extends AppCompatActivity {
         itemName = editItemName.getText().toString().trim();
         itemDescription = editTextDescription.getText().toString().trim();
         String priceString = editTextPrice.getText().toString().trim();
-        itemCategory = spinnerCategory.getSelectedItem().toString();
+
+        //new way of getting item category
+        // Get the display name from the spinner
+        String categoryDisplayArray = spinnerCategory.getSelectedItem().toString();
+
+        /*
+        values already setup for showing Mens clothing as mensclothing, Womens clothing womenscothing etc
+        so was easier to setup a Display Names and acto values of them as String Arrays and loop through them
+        */
+        String[] displayNames = getResources().getStringArray(R.array.categories_display_array);
+        String[] databaseValues = getResources().getStringArray(R.array.categories_values_array);
+        for (int i = 0; i < displayNames.length; i++) {
+            if (categoryDisplayArray.equals(displayNames[i])) {
+                itemCategory = databaseValues[i];
+                break;
+            }
+        }
 
         //validates input before firestore db update is done
         if (validateInputs(itemName, itemDescription, priceString, itemCategory)) {
             // Parse the price input
             itemPrice = Double.parseDouble(priceString);
+
+            //Get date of upload of item
+            Timestamp addDate = new Timestamp(new Date());
+
 
             // Create a Map to store the values of the items
             Map<String, Object> item = new HashMap<>();
@@ -152,12 +174,14 @@ public class ListItemActivity extends AppCompatActivity {
             item.put("price", itemPrice);
             item.put("type", itemCategory);
             item.put("img_url", itemImageUrl);
+            item.put("addDate", addDate);
 
             // Add a new document with a generated ID to the "ShowAll" collection
             db.collection("ShowAll")
                     .add(item)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(this, "Item added successfully", Toast.LENGTH_SHORT).show();
+                        addToNewProducts(item);
                         // Navigate back to the homepage
                         finish();
                     })
@@ -168,7 +192,23 @@ public class ListItemActivity extends AppCompatActivity {
             // Handle input validation failure
             Toast.makeText(this, "Please fill in all the fields correctly.", Toast.LENGTH_SHORT).show();
         }
+
+
     }
+
+    private void addToNewProducts(Map<String, Object> item) {
+        // Add the same item to 'NewProducts' collection
+        db.collection("NewProducts")
+                .add(item)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "Item also added to new products", Toast.LENGTH_SHORT).show();
+                    // Redirect or close activity as required
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to add item to new products: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
 
     private boolean validateInputs(String name, String description, String price, String category) {
         // Basic checks to make sure each input contains something
