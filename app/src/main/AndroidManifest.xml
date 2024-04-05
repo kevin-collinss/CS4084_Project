@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +26,9 @@
             android:exported="false" />
         <activity
             android:name=".activities.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ListItemActivity"
             android:exported="false" />
         <activity
             android:name=".activities.RegistrationActivity"

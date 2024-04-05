@@ -6,15 +6,24 @@
 <string name="second_slide">Fast Delivery</string>
 <string name="third_slide">Good Service</string>
 
+    <!-- Used for hadling side nav bar -->
 <string name="list_item">List Item</string>
 <string name="messages">Messages</string>
 <string name="home">Home</string>
 <string name="view_all_items">View All Items</string>
 <string name="view_all_mens">View All Mens</string>
 <string name="view_all_womens">View All Womens</string>
-
 <string name="nav_drawer_open">Open nav </string>
 <string name="nav_drawer_close">Close</string>
+
+<!-- Used for selecting categories -->
+<string-array name="categories_array">
+    <item>mens</item>
+    <item>womens</item>
+</string-array>
+
+
+
 
 
 
