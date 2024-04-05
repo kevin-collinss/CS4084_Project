@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(homeFragment);
             }
             else if (id == R.id.nav_list_item) {
-                // TODO list item
+                Intent intent = new Intent(MainActivity.this, ListItemActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_messages) {
                 // TODO messages page
             } else if (id == R.id.nav_view_all_items) {
@@ -84,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             } else if (id == R.id.nav_view_all_men) {
                 //TODO view all men
-                Intent intent = new Intent(MainActivity.this, ShowAllActivity.class);
-                startActivity(intent);
             } else if (id == R.id.nav_view_all_women) {
                 //TODO view all women
             }
