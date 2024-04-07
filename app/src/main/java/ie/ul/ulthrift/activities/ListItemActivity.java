@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.storage.FirebaseStorage;
@@ -158,6 +159,10 @@ public class ListItemActivity extends AppCompatActivity {
             }
         }
 
+        // Get the current user id of the user logged in from the Firebase Authentication
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
         //validates input before firestore db update is done
         if (validateInputs(itemName, itemDescription, priceString, itemCategory)) {
             // Parse the price input
@@ -175,6 +180,8 @@ public class ListItemActivity extends AppCompatActivity {
             item.put("type", itemCategory);
             item.put("img_url", itemImageUrl);
             item.put("addDate", addDate);
+            //New to add the userid of the user who posted the item
+            item.put("userId", currentUserId);
 
             // Add a new document with a generated ID to the "ShowAll" collection
             db.collection("ShowAll")
