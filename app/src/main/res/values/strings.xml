@@ -16,13 +16,21 @@
 <string name="nav_drawer_open">Open nav </string>
 <string name="nav_drawer_close">Close</string>
 
-<!-- Used for selecting categories -->
-<string-array name="categories_array">
-    <item>mens</item>
-    <item>womens</item>
-</string-array>
+    <!-- Display Names for categories of products -->
+    <string-array name="categories_display_array">
+        <item>Mens Clothing</item>
+        <item>Womens Clothing</item>
+        <item>Mens Shoes</item>
+        <item>Womens Shoes</item>
+    </string-array>
 
-
+    <!-- Values for categories of products as already setup this way -->
+    <string-array name="categories_values_array">
+        <item>mensclothing</item>
+        <item>womensclothing</item>
+        <item>mensshoes</item>
+        <item>womensshoes</item>
+    </string-array>
 
 
 

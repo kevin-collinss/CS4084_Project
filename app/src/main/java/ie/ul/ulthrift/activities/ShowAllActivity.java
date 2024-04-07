@@ -1,6 +1,7 @@
 package ie.ul.ulthrift.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -26,81 +27,83 @@ import ie.ul.ulthrift.models.ShowAllModel;
 
 public class ShowAllActivity extends AppCompatActivity {
 
+    // RecyclerView for displaying our items in a grid format
     RecyclerView recyclerView;
+    // adapter used for ShowAllActivity
     ShowAllAdapter showAllAdapter;
+    //List to hold the data got from firebase
     List<ShowAllModel> showAllModelList;
-
+    //Needed so we can read data from the firebase firestore
     FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //good method for ui https://developer.android.com/develop/ui/views/layout/edge-to-edge
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_show_all);
 
+        // Retrieve the type of items to display
         String type = getIntent().getStringExtra("type");
 
+        // Initialise Firestore
         firestore = FirebaseFirestore.getInstance();
+        //bind recycleviewer with our edge ui component
         recyclerView = findViewById(R.id.show_all_rec);
+        //This is our  grid sort of layout setep so items displayed in a 1x2 row sort of thing
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         showAllModelList = new ArrayList<>();
-        showAllAdapter = new ShowAllAdapter(this,showAllModelList);
+        showAllAdapter = new ShowAllAdapter(this, showAllModelList);
         recyclerView.setAdapter(showAllAdapter);
 
-        if (type == null || type.isEmpty()){
+        loadItemsOfType(type);
+    }
 
-            firestore.collection("ShowAll").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+    private void loadItemsOfType(String type) {
+        // Used log for debugging as was astruggling to get type to load
+        Log.d("ShowAllActivity", "Loading items of type: " + type);
 
-                            if (task.isSuccessful()) {
-                                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-
-                                    ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
-                                    showAllModelList.add(showAllModel);
-                                    showAllAdapter.notifyDataSetChanged();
-                                }
+        // make sure type is not null and not empty, meaning a specific category was requested to be shown
+        if (type != null && !type.isEmpty()) {
+            // Query Firestore for items of the specific type (whichever is queried)
+            firestore.collection("ShowAll")
+                    .whereEqualTo("type", type)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Create a new list to hold the filtered items (based of selection)
+                            List<ShowAllModel> filteredList = new ArrayList<>();
+                            for (DocumentSnapshot doc : task.getResult()) {
+                                // Convert each document to a ShowAllModel object
+                                ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
+                                //Add them back to filterList
+                                filteredList.add(showAllModel);
                             }
+                            showAllAdapter.updateList(filteredList);
+                            Log.d("ShowAllActivity", "Loaded " + filteredList.size() + " items of type: " + type);
+                        } else {
+                            Log.e("ShowAllActivity", "Error loading items", task.getException());
                         }
-            });
-        }
+                    });
+        } else {
+            Log.d("ShowAllActivity", "Loading all items");
 
-        if (type != null && type.equalsIgnoreCase("men")){
-
-            firestore.collection("ShowAll").whereEqualTo("type" , "men").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                            if (task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-
-                                    ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
-                                    showAllModelList.add(showAllModel);
-                                    showAllAdapter.notifyDataSetChanged();
-                                }
+            // Same, but its just for our "showAll" to show al products
+            firestore.collection("ShowAll")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<ShowAllModel> list = new ArrayList<>();
+                            for (DocumentSnapshot doc : task.getResult()) {
+                                ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
+                                list.add(showAllModel);
                             }
+                            showAllAdapter.updateList(list);
+                            Log.d("ShowAllActivity", "Loaded " + list.size() + " items in total");
+                        } else {
+                            Log.e("ShowAllActivity", "Error loading items", task.getException());
                         }
-            });
+                    });
         }
-
-        if (type != null && type.equalsIgnoreCase("women")){
-
-            firestore.collection("ShowAll").whereEqualTo("type" , "women").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                            if (task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-
-                                    ShowAllModel showAllModel = doc.toObject(ShowAllModel.class);
-                                    showAllModelList.add(showAllModel);
-                                    showAllAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-            });
-        }
-
-
     }
 }
