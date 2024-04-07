@@ -36,6 +36,7 @@ public class ShowAllActivity extends AppCompatActivity {
     //Needed so we can read data from the firebase firestore
     FirebaseFirestore firestore;
 
+    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
