@@ -104,6 +104,10 @@ public class MainActivity extends AppCompatActivity {
                 //TODO view all men
             } else if (id == R.id.nav_view_all_women) {
                 //TODO view all women
+            } else if (id == R.id.nav_my_listings) {
+                Intent intent = new Intent(MainActivity.this, MyListingsActivity.class);
+                startActivity(intent);
+
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);

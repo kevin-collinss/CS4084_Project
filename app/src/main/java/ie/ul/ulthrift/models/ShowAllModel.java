@@ -5,6 +5,8 @@ import java.io.Serializable;
 public class ShowAllModel implements Serializable {
 
     String description, name, rating, img_url, type;
+    //Needs to be private
+    private String documentId;
     int price;
 
     public ShowAllModel() {
@@ -58,12 +60,24 @@ public class ShowAllModel implements Serializable {
         this.price = price;
     }
 
-    public ShowAllModel(String description, String name, String rating, String img_url, String type, int price) {
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    //setting the documentid
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
+    public ShowAllModel(String description, String name, String rating, String img_url, String type, int price, String documentId) {
         this.description = description;
         this.name = name;
         this.rating = rating;
         this.img_url = img_url;
         this.type = type;
         this.price = price;
+        this.documentId = documentId; //Need this for deleting the product
     }
+
+
 }
