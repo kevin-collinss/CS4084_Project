@@ -30,6 +30,8 @@
         <activity
             android:name=".activities.ListItemActivity"
             android:exported="false" />
+        <activity android:name=".activities.MyListingsActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.RegistrationActivity"
             android:exported="true">

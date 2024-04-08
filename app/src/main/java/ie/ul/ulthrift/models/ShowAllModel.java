@@ -5,6 +5,11 @@ import java.io.Serializable;
 public class ShowAllModel implements Serializable {
 
     String description, name, rating, img_url, type;
+    //Needs to be private
+    private String documentId;
+
+    //Document id for newProduct
+    private String newProductDocId;
     int price;
 
     public ShowAllModel() {
@@ -58,12 +63,34 @@ public class ShowAllModel implements Serializable {
         this.price = price;
     }
 
-    public ShowAllModel(String description, String name, String rating, String img_url, String type, int price) {
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    //setting the documentid
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
+    public String getNewProductDocId() {
+        return newProductDocId;
+    }
+
+    public void setNewProductDocId(String newProductDocId) {
+        this.newProductDocId = newProductDocId;
+    }
+
+
+    public ShowAllModel(String description, String name, String rating, String img_url, String type, int price, String documentId, String newProductDocId) {
         this.description = description;
         this.name = name;
         this.rating = rating;
         this.img_url = img_url;
         this.type = type;
         this.price = price;
+        this.documentId = documentId; //Need this for deleting the product
+        this.newProductDocId = newProductDocId; // Need this for deleting this product from new products
     }
+
+
 }
