@@ -80,27 +80,80 @@ public class MyListingsActivity extends AppCompatActivity implements MyListingsA
         }
     }
 
-
+    // Method called when  delete button for a specific user listing is clicked
     @Override
     public void onDeleteClick(int position) {
+        // Get selected model
+        ShowAllModel selectedModel = myListings.get(position);
+        // Get the document ID of the listing from the ShowAll collection
+        String showAllDocId = selectedModel.getDocumentId();
+        /*
+        Get the document ID of the corresponding listing from the NewProducts collection
+        As they are in seperate collections ids are different so now we post the ShowAll doc id
+        In as a field(showAllDocId) of NewProducts collection so we can identify it and then get the right
+        product to delete from NewProducts
+        */
+        String newProductsDocId = selectedModel.getNewProductDocId();
 
-        //Get the document ID from the item at the specified position
-        String documentId = myListings.get(position).getDocumentId();
+        // Make sure no errors with the ShowAllDocId
+        if (showAllDocId != null && !showAllDocId.trim().isEmpty()) {
+            //call method to delete from ShowAll
+            deleteFromFirestore("ShowAll", showAllDocId, position);
 
-        if (documentId != null && !documentId.trim().isEmpty()) {
-            db.collection("ShowAll").document(documentId).delete()
-                    .addOnSuccessListener(aVoid -> {
-                        //use the document ID to delete the document from Firestore
+            //Same for the coresspondeing product in NewProducts
+            if (newProductsDocId != null && !newProductsDocId.trim().isEmpty()) {
+                //call our New Products check and delete
+                checkAndDeleteFromNewProducts(newProductsDocId);
+            }
+        } else {
+            //error displaying if was one
+            Toast.makeText(this, "Error: Document ID is null or empty, cannot delete the document.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Method to check and delete the corresponding listing from the NewProducts collection
+    private void checkAndDeleteFromNewProducts(String showAllDocId ) {
+        /*
+        Query NewProducts collection to find documents
+        where the showAllDocId field matches the provided value
+        */
+        db.collection("NewProducts")
+                .whereEqualTo("showAllDocId", showAllDocId)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    //If it matches (which it should unless been up for more than 2 days, call delete method
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        String newProductsDocId = document.getId();
+                        deleteFromNewProducts(newProductsDocId);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("MyListingsActivity", "Error finding document in NewProducts collection", e);
+                });
+    }
+
+    private void deleteFromNewProducts(String newProductsDocId) {
+        //deletes corresponding from new Products
+        db.collection("NewProducts").document(newProductsDocId).delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("MyListingsActivity", "Item deleted from NewProducts collection with docId: " + newProductsDocId);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("MyListingsActivity", "Failed to delete item from NewProducts collection", e);
+                });
+    }
+
+    private void deleteFromFirestore(String collection, String docId, int position) {
+        //delete from ShowAll which is called earlier in onDeleteClick
+        db.collection(collection).document(docId).delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore Delete", "Document with ID " + docId + " deleted from " + collection);
+                    if (position >= 0) { // Only remove from the list if a valid position is passed
                         myListings.remove(position);
                         adapter.notifyItemRemoved(position);
-                        Toast.makeText(MyListingsActivity.this, "Listing deleted successfully", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(MyListingsActivity.this, "Error deleting listing", Toast.LENGTH_SHORT).show();
-                    });
-        } else {
-            Toast.makeText(MyListingsActivity.this, "Error: Document ID is null or empty, cannot delete the document.", Toast.LENGTH_SHORT).show();
-        }
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Firestore Delete", "Error deleting document", e));
     }
 }
 

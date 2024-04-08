@@ -188,7 +188,18 @@ public class ListItemActivity extends AppCompatActivity {
                     .add(item)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(this, "Item added successfully", Toast.LENGTH_SHORT).show();
-                        addToNewProducts(item);
+                        // Retrieve the document ID of the newly added item
+                        String showAllDocId = documentReference.getId();
+                        db.collection("ShowAll").document(showAllDocId)
+                                .update("newProductDocId", documentReference.getId())
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(this, "NewProductDocId updated successfully", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Failed to update NewProductDocId: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+
+                        addToNewProducts(item, showAllDocId);
                         // Navigate back to the homepage
                         finish();
                     })
@@ -203,12 +214,13 @@ public class ListItemActivity extends AppCompatActivity {
 
     }
 
-    private void addToNewProducts(Map<String, Object> item) {
+    private void addToNewProducts(Map<String, Object> item, String showAllDocId) {
         // Add the same item to 'NewProducts' collection
+        item.put("showAllDocId", showAllDocId); // Add the reference to the 'ShowAll' document
         db.collection("NewProducts")
                 .add(item)
                 .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(this, "Item also added to new products", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Item added to new products successfully", Toast.LENGTH_SHORT).show();
                     // Redirect or close activity as required
                 })
                 .addOnFailureListener(e -> {
