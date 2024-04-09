@@ -2,6 +2,7 @@ package ie.ul.ulthrift.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -90,9 +91,26 @@ public class DetailedActivity extends AppCompatActivity {
             addFavouriteItem();
         });
 
-        String itemId = getItemId(); // The ID of the NewProducts or ShowAll item being displayed.
-        checkFavouriteStatus(itemId);
+        // Call get userId methods in NewProducts and ShowAll depending what view is called
+        String productUserId = (newProductsModel != null) ? newProductsModel.getUserId() :
+                (showAllModel != null) ? showAllModel.getUserId() : "";
+
+        //get current userid
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Check if user logged in is actually viewing own product
+        if(productUserId.equals(currentUserId)) {
+            // Hide both buttons if the user is viewing own listing
+            findViewById(R.id.add_to_favourites).setVisibility(View.GONE);
+            findViewById(R.id.message_seller).setVisibility(View.GONE);
+        } else {
+            //Else call itemId method and see if already favoruited and go on from there
+            String itemId = getItemId();
+            checkFavouriteStatus(itemId);
+            addToFavourites.setOnClickListener(v -> addFavouriteItem());
+        }
     }
+
 
     private void addFavouriteItem() { //Dont actually need to pass objects
         //Gets userid of current user. Checks if its null too just incase somehow bypass
