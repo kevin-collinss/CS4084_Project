@@ -10,6 +10,9 @@ public class ShowAllModel implements Serializable {
 
     //Document id for newProduct
     private String newProductDocId;
+
+    //Needed for user seeing own product
+    private String userId;
     int price;
 
     public ShowAllModel() {
@@ -81,15 +84,24 @@ public class ShowAllModel implements Serializable {
     }
 
 
-        public ShowAllModel(String description, String name, String rating, String img_url, String type, int price, String documentId, String newProductDocId) {
-            this.description = description;
-            this.name = name;
-            this.rating = rating;
-            this.img_url = img_url;
-            this.type = type;
-            this.price = price;
-            this.documentId = documentId; //Need this for deleting the product
-            this.newProductDocId = newProductDocId; // Need this for deleting this product from new products
-        }
-
+    public ShowAllModel(String description, String name, String rating, String img_url, String type, int price, String documentId, String newProductDocId, String userId) {
+        this.description = description;
+        this.name = name;
+        this.rating = rating;
+        this.img_url = img_url;
+        this.type = type;
+        this.price = price;
+        this.documentId = documentId; //Need this for deleting the product
+        this.newProductDocId = newProductDocId; // Need this for deleting this product from new products
     }
+
+    //setter for userid
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    //getter for userId
+    public String getUserId() {
+        return userId;
+    }
+}

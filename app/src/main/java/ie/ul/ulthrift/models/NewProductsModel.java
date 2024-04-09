@@ -5,6 +5,8 @@ import java.io.Serializable;
 public class NewProductsModel implements Serializable {
     String description, name, img_url, showAllDocId;
     int price;
+    //needed for user seeing own product
+    private String userId;
 
     public NewProductsModel() {
     }
@@ -57,4 +59,15 @@ public class NewProductsModel implements Serializable {
     public void setShowAllDocId(String showAllDocId) {
         this.showAllDocId = showAllDocId;
     }
+   //setter for userId
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    //getter for userId
+    public String getUserId() {
+        return userId;
+    }
+
+
 }
