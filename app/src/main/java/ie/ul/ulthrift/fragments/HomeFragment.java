@@ -170,7 +170,61 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-
         return root;
+
+    }
+
+    public void onResume() {
+        super.onResume();
+       /*
+         Called when the fragment is visible to the user and is running.
+         when its resumed it calls loadNewProducts method.
+       */
+        loadNewProducts();
+    }
+
+    private void loadNewProducts() {
+        // This method retrieves the new products from the Firestore database.
+        Log.d("HomeFragment", "loadNewProducts() called");
+        //show laoding dialog to inform whos logged in data is being loaded
+        showProgressDialog();
+
+        // Query the NewProducts collection from Firestore and get all the products
+        db.collection("NewProducts")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    Log.d("HomeFragment", "Successfully got new products list, size: " + queryDocumentSnapshots.size());
+                    newProductsModelList.clear(); // Clear the list to avoid duplication
+
+                    // Iterate through the fetched documents and convert each to a NewProductsModel object.
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        NewProductsModel newProductsModel = document.toObject(NewProductsModel.class);
+                        Log.d("HomeFragment", "Adding product: " + newProductsModel.getName());
+                        newProductsModelList.add(newProductsModel);
+                    }
+                    // Notify the RecyclerView adapter that the data for new products has changed.
+                    newProductsAdaptor.notifyDataSetChanged();
+                    dismissProgressDialog(); //Or else it continues saying Welcome to UlThrifts
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("HomeFragment", "Error loading new products", e);
+                    dismissProgressDialog();
+                });
+    }
+
+    private void showProgressDialog() {
+        // Checks if the progress dialog exists and is not already showing.
+        // If it's not showing, it will display the dialog.
+        if (progressDialog != null && !progressDialog.isShowing()) {
+            progressDialog.show();
+        }
+    }
+
+    private void dismissProgressDialog() {
+        //Checks if the progress dialog is currently displayed.
+        // If it is, it will dismiss the dialog to remove it from the screen.
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }
