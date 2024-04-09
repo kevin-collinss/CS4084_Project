@@ -85,7 +85,7 @@
                     .addOnSuccessListener(documentSnapshot -> {
                         //check if the document is found
                         if (documentSnapshot.exists()) {
-                            //convert the snapshot to ShowAllModel obkect
+                            //convert the snapshot to ShowAllModel object
                             ShowAllModel showAllModel = documentSnapshot.toObject(ShowAllModel.class);
                             if (showAllModel != null) {
                                 // If  successful, add the ShowAllModel object to the favourites list i.e get the products

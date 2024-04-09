@@ -100,7 +100,7 @@ public class DetailedActivity extends AppCompatActivity {
         }
 
         // Get the product model that is passed
-        String referenceId = (showAllModel != null) ? showAllModel.getDocumentId() :
+        String referenceId = (showAllModel != null) ? showAllModel.getNewProductDocId() :
                 (newProductsModel != null) ? newProductsModel.getShowAllDocId() : null;
 
         //if some error log
