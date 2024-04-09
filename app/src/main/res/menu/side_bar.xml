@@ -1,27 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_home"
-        android:title="@string/home" />
-    <item
         android:id="@+id/nav_list_item"
         android:title="@string/list_item" />
     <item
         android:id="@+id/nav_messages"
         android:title="@string/messages" />
-
     <item
         android:id="@+id/nav_view_all_items"
         android:title="@string/view_all_items" />
-
-    <item
-        android:id="@+id/nav_view_all_men"
-        android:title="@string/view_all_mens" />
-
-    <item
-        android:id="@+id/nav_view_all_women"
-        android:title="@string/view_all_womens" />
-
     <item
         android:id="@+id/nav_my_listings"
         android:title="@string/view_my_listings" />
+    <item
+        android:id="@+id/nav_my_favourites"
+        android:title="@string/view_my_favourites" />
 </menu>

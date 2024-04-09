@@ -3,22 +3,19 @@ package ie.ul.ulthrift.models;
 import java.io.Serializable;
 
 public class NewProductsModel implements Serializable {
-
-    String description, name, img_url;
+    String description, name, img_url, showAllDocId;
     int price;
 
     public NewProductsModel() {
-
     }
 
-
-    public NewProductsModel(String description, String name,  String img_url, int price) {
+    public NewProductsModel(String description, String name, String img_url, int price, String showAllDocId) {
         this.description = description;
         this.name = name;
         this.img_url = img_url;
         this.price = price;
+        this.showAllDocId = showAllDocId;
     }
-
 
     public String getDescription() {
         return description;
@@ -50,5 +47,14 @@ public class NewProductsModel implements Serializable {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    //Added in as now add these fields
+    public String getShowAllDocId() {
+        return showAllDocId;
+    }
+
+    public void setShowAllDocId(String showAllDocId) {
+        this.showAllDocId = showAllDocId;
     }
 }

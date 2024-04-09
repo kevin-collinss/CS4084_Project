@@ -32,6 +32,8 @@
             android:exported="false" />
         <activity android:name=".activities.MyListingsActivity"
             android:exported="false" />
+        <activity android:name=".activities.MyFavouritesActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.RegistrationActivity"
             android:exported="true">

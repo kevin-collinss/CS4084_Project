@@ -71,7 +71,7 @@ public class ShowAllModel implements Serializable {
     public void setDocumentId(String documentId) {
         this.documentId = documentId;
     }
-
+    //get documentId
     public String getNewProductDocId() {
         return newProductDocId;
     }
@@ -81,16 +81,15 @@ public class ShowAllModel implements Serializable {
     }
 
 
-    public ShowAllModel(String description, String name, String rating, String img_url, String type, int price, String documentId, String newProductDocId) {
-        this.description = description;
-        this.name = name;
-        this.rating = rating;
-        this.img_url = img_url;
-        this.type = type;
-        this.price = price;
-        this.documentId = documentId; //Need this for deleting the product
-        this.newProductDocId = newProductDocId; // Need this for deleting this product from new products
+        public ShowAllModel(String description, String name, String rating, String img_url, String type, int price, String documentId, String newProductDocId) {
+            this.description = description;
+            this.name = name;
+            this.rating = rating;
+            this.img_url = img_url;
+            this.type = type;
+            this.price = price;
+            this.documentId = documentId; //Need this for deleting the product
+            this.newProductDocId = newProductDocId; // Need this for deleting this product from new products
+        }
+
     }
-
-
-}

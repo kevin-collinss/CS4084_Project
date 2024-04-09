@@ -86,13 +86,10 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(item -> {
-            // Handle navigation view item clicks here.
+            // Handle navigation view
             int id = item.getItemId();
 
-            if (id == R.id.home_nav_bar) {
-                loadFragment(homeFragment);
-            }
-            else if (id == R.id.nav_list_item) {
+            if (id == R.id.nav_list_item) {
                 Intent intent = new Intent(MainActivity.this, ListItemActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_messages) {
@@ -100,12 +97,12 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_view_all_items) {
                 Intent intent = new Intent(MainActivity.this, ShowAllActivity.class);
                 startActivity(intent);
-            } else if (id == R.id.nav_view_all_men) {
-                //TODO view all men
-            } else if (id == R.id.nav_view_all_women) {
-                //TODO view all women
             } else if (id == R.id.nav_my_listings) {
                 Intent intent = new Intent(MainActivity.this, MyListingsActivity.class);
+                startActivity(intent);
+
+            } else if (id == R.id.nav_my_favourites) {
+                Intent intent = new Intent(MainActivity.this, MyFavouritesActivity.class);
                 startActivity(intent);
 
             }

@@ -54,28 +54,7 @@
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/rating"
-                    android:fontFamily="@font/amethysta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4.5"
-                    android:textColor="@color/black"
-                    android:layout_toStartOf="@+id/my_rating"
-                    android:textSize="16sp"
-                    android:layout_marginTop="9dp"
-                    android:layout_marginEnd="2dp"/>
 
-                <RatingBar
-                    android:id="@+id/my_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="11dp"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:stepSize="0.1"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_alignParentEnd="true"/>
 
             </RelativeLayout>
 
