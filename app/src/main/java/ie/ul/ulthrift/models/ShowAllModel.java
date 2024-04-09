@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class ShowAllModel implements Serializable {
 
-    String description, name, rating, img_url, type;
+    String description, name, img_url;
     //Needs to be private
     private String documentId;
 
@@ -22,9 +22,6 @@ public class ShowAllModel implements Serializable {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public String getName() {
         return name;
@@ -34,36 +31,13 @@ public class ShowAllModel implements Serializable {
         this.name = name;
     }
 
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
 
     public String getImg_url() {
         return img_url;
     }
 
-    public void setImg_url(String img_url) {
-        this.img_url = img_url;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public String getDocumentId() {
@@ -77,27 +51,6 @@ public class ShowAllModel implements Serializable {
     //get documentId
     public String getNewProductDocId() {
         return newProductDocId;
-    }
-
-    public void setNewProductDocId(String newProductDocId) {
-        this.newProductDocId = newProductDocId;
-    }
-
-
-    public ShowAllModel(String description, String name, String rating, String img_url, String type, int price, String documentId, String newProductDocId, String userId) {
-        this.description = description;
-        this.name = name;
-        this.rating = rating;
-        this.img_url = img_url;
-        this.type = type;
-        this.price = price;
-        this.documentId = documentId; //Need this for deleting the product
-        this.newProductDocId = newProductDocId; // Need this for deleting this product from new products
-    }
-
-    //setter for userid
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     //getter for userId
