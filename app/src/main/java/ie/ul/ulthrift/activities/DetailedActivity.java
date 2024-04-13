@@ -1,5 +1,7 @@
 package ie.ul.ulthrift.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +33,8 @@ public class DetailedActivity extends AppCompatActivity {
     ImageView detailedImg;
     TextView name, description, price;
     Button addToFavourites, messageSeller;
+
+    String userId;
 
     // New Products
     NewProductsModel newProductsModel = null;
@@ -90,6 +94,16 @@ public class DetailedActivity extends AppCompatActivity {
             // Assuming that newProductsModel has a reference to the ShowAll ID
             addFavouriteItem();
         });
+
+        messageSeller.setOnClickListener(v -> {
+            // Create an intent to start the MessageActivity
+            Intent intent = new Intent(DetailedActivity.this, MessageActivity.class);
+            // Pass other userId over to messages
+            intent.putExtra("otherUserId", getOtherUserId());
+            // Start the MessageActivity
+            startActivity(intent);
+        });
+
 
         // Call get userId methods in NewProducts and ShowAll depending what view is called
         String productUserId = (newProductsModel != null) ? newProductsModel.getUserId() :
@@ -157,6 +171,15 @@ public class DetailedActivity extends AppCompatActivity {
             return newProductsModel.getShowAllDocId();
         } else if (showAllModel != null) {
             return showAllModel.getNewProductDocId();
+        }
+        return null;
+    }
+
+    private String getOtherUserId() {
+        if (newProductsModel != null) {
+            return newProductsModel.getUserId();
+        } else if (showAllModel != null) {
+            return showAllModel.getUserId();
         }
         return null;
     }
