@@ -13,18 +13,28 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ie.ul.ulthrift.R;
+import ie.ul.ulthrift.models.UserModel;
 
 public class RegistrationActivity extends AppCompatActivity {
     EditText name, email, password;
     private FirebaseAuth auth;
+    private FirebaseFirestore firestore;
 
     SharedPreferences sharedPreferences;
 
@@ -32,6 +42,9 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        // Initialize Firebase Firestore
+        firestore = FirebaseFirestore.getInstance();
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -115,7 +128,6 @@ public class RegistrationActivity extends AppCompatActivity {
         }
 
 
-
         // Attempts to create a user account with Firebase Auth using the provided email and password
         auth.createUserWithEmailAndPassword(userEmail, userPassword)
                 .addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
@@ -125,8 +137,28 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         // if the registration is successful, display that they registered, otherwise display it failed
                         if (task.isSuccessful()) {
-                            Toast.makeText(RegistrationActivity.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+                            // Get the UID of the newly registered user
+                            String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                            // Create a user object
+                            final UserModel user = new UserModel(userName, userEmail, userPassword, userUid);
+
+                            firestore.collection("users").document(userUid).set(user)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Toast.makeText(RegistrationActivity.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
+                                                    startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+                                                }
+                                            })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(RegistrationActivity.this, "Registration Failed"+task.getException(), Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+
                         } else {
                             Toast.makeText(RegistrationActivity.this, "Registration Failed"+task.getException(), Toast.LENGTH_SHORT).show();
 
