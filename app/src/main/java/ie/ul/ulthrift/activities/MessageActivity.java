@@ -9,10 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Arrays;
 
@@ -37,6 +34,8 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+
+
 
         //Get other userId
         otherUserId = getIntent().getStringExtra("otherUserId");
@@ -75,6 +74,22 @@ public class MessageActivity extends AppCompatActivity {
                 }
             }
         });
+
+        FirebaseUtil.getUserReference(otherUserId).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String otherUserName = documentSnapshot.getString("name");
+                if (otherUserName != null) {
+                    otherUsername.setText(otherUserName);
+                } else {
+                    otherUsername.setText(otherUserId); // Set to otherUserId if name is not found
+                }
+            } else {
+                otherUsername.setText(otherUserId); // Set to otherUserId if user document does not exist
+            }
+        }).addOnFailureListener(e -> {
+            otherUsername.setText(otherUserId); // Set to otherUserId in case of failure
+        });
+
     }
 
 
