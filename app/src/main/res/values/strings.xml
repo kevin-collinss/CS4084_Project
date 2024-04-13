@@ -1,22 +1,22 @@
 <resources>
-<string name="app_name">Ul Thrift</string>
+    <string name="app_name">Ul Thrift</string>
 
 
-<string name="first_slide">Choose Your Products</string>
-<string name="second_slide">From Fellow Students</string>
-<string name="third_slide">Excellent Service</string>
+    <string name="first_slide">Choose Your Products</string>
+    <string name="second_slide">From Fellow Students</string>
+    <string name="third_slide">Excellent Service</string>
 
     <!-- Used for handling side nav bar -->
-<string name="list_item">List Item</string>
-<string name="messages">Messages</string>
-<string name="home">Home</string>
-<string name="view_all_items">View All Items</string>
-<string name="view_all_mens">View All Mens</string>
-<string name="view_all_womens">View All Womens</string>
-<string name="view_my_listings">View My Listings</string>
-<string name="view_my_favourites">View My Favourites</string>
-<string name="nav_drawer_open">Open nav </string>
-<string name="nav_drawer_close">Close</string>
+    <string name="list_item">List Item</string>
+    <string name="messages">Messages</string>
+    <string name="home">Home</string>
+    <string name="view_all_items">View All Items</string>
+    <string name="view_all_mens">View All Mens</string>
+    <string name="view_all_womens">View All Womens</string>
+    <string name="view_my_listings">View My Listings</string>
+    <string name="view_my_favourites">View My Favourites</string>
+    <string name="nav_drawer_open">Open nav </string>
+    <string name="nav_drawer_close">Close</string>
 
     <!-- Display Names for categories of products -->
     <string-array name="categories_display_array">
@@ -35,9 +35,5 @@
     </string-array>
 
 
-
-
-
-
-<string name="description">We are UL Thrifts</string>
+    <string name="description">We are UL Thrifts</string>
 </resources>
