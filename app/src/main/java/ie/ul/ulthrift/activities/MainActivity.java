@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ListItemActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_messages) {
-                // TODO messages page
+                Intent intent = new Intent(MainActivity.this, MyMessages.class);
+                startActivity(intent);
             } else if (id == R.id.nav_view_all_items) {
                 Intent intent = new Intent(MainActivity.this, ShowAllActivity.class);
                 startActivity(intent);
@@ -105,8 +106,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, MyFavouritesActivity.class);
                 startActivity(intent);
 
-            }else if (id == R.id.nav_messages){
-                Intent intent = new Intent(MainActivity.this, MyMessages.class);
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);
