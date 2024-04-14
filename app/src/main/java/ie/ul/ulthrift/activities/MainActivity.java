@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.Firebase;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ListItemActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_messages) {
-                Intent intent = new Intent(MainActivity.this, MyMessages.class);
+                Intent intent = new Intent(MainActivity.this, MyMessagesActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_view_all_items) {
                 Intent intent = new Intent(MainActivity.this, ShowAllActivity.class);
