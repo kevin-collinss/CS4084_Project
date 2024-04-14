@@ -2,6 +2,7 @@ package ie.ul.ulthrift.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -9,14 +10,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.Query;
 
 import java.util.Arrays;
 
 import ie.ul.ulthrift.R;
+import ie.ul.ulthrift.adaptors.MessageAdaptor;
 import ie.ul.ulthrift.models.MessageModel;
 import ie.ul.ulthrift.models.MessageRoomModel;
 import ie.ul.ulthrift.utils.FirebaseUtil;
@@ -26,6 +30,7 @@ public class MessageActivity extends AppCompatActivity {
     String otherUserId;
     String messageRoomId;
     MessageRoomModel messageRoomModel;
+    MessageAdaptor messageAdaptor;
     EditText messageInput;
     ImageButton sendMessageBtn;
     ImageButton backBtn;
@@ -67,7 +72,30 @@ public class MessageActivity extends AppCompatActivity {
 
 
         getOrCreateMessageModel();
+        setupMessageView();
 
+    }
+
+    private void setupMessageView() {
+        Query query = FirebaseUtil.getChatroomMessageReference(messageRoomId)
+                .orderBy("timestamp", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<MessageModel> options = new FirestoreRecyclerOptions.Builder<MessageModel>()
+                .setQuery(query,MessageModel.class).build();
+
+        messageAdaptor = new MessageAdaptor(options,getApplicationContext());
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setReverseLayout(true);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(messageAdaptor);
+        messageAdaptor.startListening();
+        messageAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                recyclerView.smoothScrollToPosition(0);
+            }
+        });
     }
 
     private void sendMessageToUser(String message) {
