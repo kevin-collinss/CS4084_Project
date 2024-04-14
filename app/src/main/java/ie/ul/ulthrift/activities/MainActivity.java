@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, MyFavouritesActivity.class);
                 startActivity(intent);
 
+            }else if (id == R.id.nav_messages){
+                Intent intent = new Intent(MainActivity.this, MyMessages.class);
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);
