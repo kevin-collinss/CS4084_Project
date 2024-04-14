@@ -23,6 +23,10 @@ public class FirebaseUtil {
             return FirebaseFirestore.getInstance().collection("ChatRooms").document(chatroomId);
         }
 
+    public static CollectionReference getChatroomMessageReference(String chatroomId){
+        return getMessageRoomReference(chatroomId).collection("chats");
+    }
+
     // Assume this method returns a reference to the user document in Firestore based on the provided userId
     public static DocumentReference getUserReference(String userId) {
         // Reference to the "users" collection where user documents are stored

@@ -9,11 +9,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Arrays;
 
 import ie.ul.ulthrift.R;
+import ie.ul.ulthrift.models.MessageModel;
 import ie.ul.ulthrift.models.MessageRoomModel;
 import ie.ul.ulthrift.utils.FirebaseUtil;
 
@@ -54,8 +58,35 @@ public class MessageActivity extends AppCompatActivity {
 
         otherUsername.setText(otherUserId);
 
+        sendMessageBtn.setOnClickListener((v -> {
+            String message = messageInput.getText().toString().trim();
+            if(message.isEmpty())
+                return;
+            sendMessageToUser(message);
+        }));
+
+
         getOrCreateMessageModel();
 
+    }
+
+    private void sendMessageToUser(String message) {
+        messageRoomModel.setLastMessageTimestamp(Timestamp.now());
+        messageRoomModel.setLastMessageSenderId(FirebaseUtil.currentUserId());
+        messageRoomModel.setLastMessage(message);
+        FirebaseUtil.getMessageRoomReference(messageRoomId).set(messageRoomModel);
+
+        MessageModel chatMessageModel = new MessageModel(message,FirebaseUtil.currentUserId(),Timestamp.now());
+        FirebaseUtil.getChatroomMessageReference(messageRoomId).add(chatMessageModel)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if(task.isSuccessful()){
+                            messageInput.setText("");
+                        }
+                    }
+
+                });
     }
 
     private void getOrCreateMessageModel(){
