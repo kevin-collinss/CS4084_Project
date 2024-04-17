@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.Firebase;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -70,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(homeFragment);
 
 
-
         //Get fire store instance
         firestore = FirebaseFirestore.getInstance();
 
@@ -93,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ListItemActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_messages) {
-                // TODO messages page
+                Intent intent = new Intent(MainActivity.this, MyMessagesActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_view_all_items) {
                 Intent intent = new Intent(MainActivity.this, ShowAllActivity.class);
                 startActivity(intent);
@@ -138,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment homeFragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.home_container,homeFragment);
+        transaction.replace(R.id.home_container, homeFragment);
         transaction.commit();
     }
 

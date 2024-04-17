@@ -135,6 +135,7 @@ public class HomeFragment extends Fragment {
                             progressDialog.dismiss();
                             Log.d("FireStore", document.getId() + " => " + document.getData());
                         }
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -161,6 +162,7 @@ public class HomeFragment extends Fragment {
                             newProductsAdaptor.notifyDataSetChanged();
                             Log.d("FireStore", document.getId() + " => " + document.getData());
                         }
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

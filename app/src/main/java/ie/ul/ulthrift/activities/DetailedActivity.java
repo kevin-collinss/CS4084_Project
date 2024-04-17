@@ -1,5 +1,6 @@
 package ie.ul.ulthrift.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -91,6 +92,17 @@ public class DetailedActivity extends AppCompatActivity {
             addFavouriteItem();
         });
 
+        // Handle Message Seller Button click
+        messageSeller.setOnClickListener(v -> {
+            // Create an intent to start the MessageActivity
+            Intent intent = new Intent(DetailedActivity.this, MessageActivity.class);
+            // Pass other userId over to messages
+            intent.putExtra("otherUserId", getOtherUserId());
+            // Start the MessageActivity
+            startActivity(intent);
+        });
+
+
         // Call get userId methods in NewProducts and ShowAll depending what view is called
         String productUserId = (newProductsModel != null) ? newProductsModel.getUserId() :
                 (showAllModel != null) ? showAllModel.getUserId() : "";
@@ -99,7 +111,7 @@ public class DetailedActivity extends AppCompatActivity {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // Check if user logged in is actually viewing own product
-        if(productUserId.equals(currentUserId)) {
+        if (productUserId.equals(currentUserId)) {
             // Hide both buttons if the user is viewing own listing
             findViewById(R.id.add_to_favourites).setVisibility(View.GONE);
             findViewById(R.id.message_seller).setVisibility(View.GONE);
@@ -157,6 +169,16 @@ public class DetailedActivity extends AppCompatActivity {
             return newProductsModel.getShowAllDocId();
         } else if (showAllModel != null) {
             return showAllModel.getNewProductDocId();
+        }
+        return null;
+    }
+
+    //get the userId of who is selling the product whether viewed from ShowALl or NewProducts Colletion
+    private String getOtherUserId() {
+        if (newProductsModel != null) {
+            return newProductsModel.getUserId();
+        } else if (showAllModel != null) {
+            return showAllModel.getUserId();
         }
         return null;
     }
