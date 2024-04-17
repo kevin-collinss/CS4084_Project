@@ -1,6 +1,5 @@
 package ie.ul.ulthrift.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,12 +8,10 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.Query;
 
 import java.util.Arrays;
@@ -44,51 +41,68 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
-
-
-        //Get other userId
+        //Get userId of the seller
         otherUserId = getIntent().getStringExtra("otherUserId");
+
+        // get/create message room id
         messageRoomId = FirebaseUtil.getChatroomId(FirebaseUtil.currentUserId(), otherUserId);
 
+        // Initialize UI components
         messageInput = findViewById(R.id.chat_message_input);
         sendMessageBtn = findViewById(R.id.message_send_btn);
         backBtn = findViewById(R.id.back_btn);
         otherUsername = findViewById(R.id.other_username);
         recyclerView = findViewById(R.id.chat_recycler_view);
 
-        //back btn
-        backBtn.setOnClickListener((v)->{
+        // Handle back button click
+        backBtn.setOnClickListener((v) -> {
             finish();
         });
 
-        otherUsername.setText(otherUserId);
-
+        // Handle send message button click
         sendMessageBtn.setOnClickListener((v -> {
+            // Gets message input as string and trims any trailing whitespace
             String message = messageInput.getText().toString().trim();
-            if(message.isEmpty())
+            if (message.isEmpty())
                 return;
             sendMessageToUser(message);
         }));
 
-
         getOrCreateMessageModel();
         setupMessageView();
-
     }
 
+    //Setting up RecyclerView to display messages
     private void setupMessageView() {
+        // Query to retrieve messages for the current specific chat room, ordered by timestamp in descending order, meaning the latest messages will appear first
         Query query = FirebaseUtil.getChatroomMessageReference(messageRoomId)
                 .orderBy("timestamp", Query.Direction.DESCENDING);
 
+        // Configure options for FirestoreRecyclerAdapter
+        // The FirestoreRecyclerAdapter binds a Query to a RecyclerView. When documents are added, removed, or change these updates are automatically applied to your UI in real time.
+        // MessageModel.class instructs the adaptor to convert each DocumentSnapshot to a MessageModel object
         FirestoreRecyclerOptions<MessageModel> options = new FirestoreRecyclerOptions.Builder<MessageModel>()
-                .setQuery(query,MessageModel.class).build();
+                .setQuery(query, MessageModel.class).build();
 
-        messageAdaptor = new MessageAdaptor(options,getApplicationContext());
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setReverseLayout(true);
-        recyclerView.setLayoutManager(manager);
+        // Initialises new messageAdaptor
+        messageAdaptor = new MessageAdaptor(options, getApplicationContext());
+
+        // Linear Layout that manages the arrangement of the items in the RecyclerView
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+
+        //This reverses the layout manager so new messages added will appear at the bottom
+        linearLayoutManager.setReverseLayout(true);
+
+        //This sets the layout manager to the recyclerView. It determines how items in the recyclerview will be laid out
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        //sets the messageAdaptor to the view.
         recyclerView.setAdapter(messageAdaptor);
+
+        // This line starts listening to changes in the Firestore database
         messageAdaptor.startListening();
+
+        // Automatically scrolls to the latest message when a new message is added
         messageAdaptor.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -98,58 +112,93 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
+    // Send a message to the other user
     private void sendMessageToUser(String message) {
+
+        // Update the message room model with the latest message details
         messageRoomModel.setLastMessageTimestamp(Timestamp.now());
         messageRoomModel.setLastMessageSenderId(FirebaseUtil.currentUserId());
         messageRoomModel.setLastMessage(message);
+
+        // Update the message room document in Firestore database
         FirebaseUtil.getMessageRoomReference(messageRoomId).set(messageRoomModel);
 
-        MessageModel chatMessageModel = new MessageModel(message,FirebaseUtil.currentUserId(),Timestamp.now());
-        FirebaseUtil.getChatroomMessageReference(messageRoomId).add(chatMessageModel)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if(task.isSuccessful()){
-                            messageInput.setText("");
-                        }
-                    }
+        // Create a new message model object using the message input, the senders userId and the timestamp
+        MessageModel chatMessageModel = new MessageModel(message, FirebaseUtil.currentUserId(), Timestamp.now());
 
-                });
+        // Add the new message to the chat room in Firestore.
+        // When completed successfully, clear the message input field
+        // If failed, it informs the user
+        FirebaseUtil.getChatroomMessageReference(messageRoomId).add(chatMessageModel)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        messageInput.setText("");
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getApplicationContext(), "Failed to send message. Please try again.", Toast.LENGTH_SHORT).show());
     }
 
-    private void getOrCreateMessageModel(){
+    // gets or creates a message model if it doesn't exist
+    private void getOrCreateMessageModel() {
+        // Retrieve the message room model from Firestore
         FirebaseUtil.getMessageRoomReference(messageRoomId).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
+            if (task.isSuccessful()) {
+
+                // If successful, it converts the Firestore document to a MessageRoomModel object
                 messageRoomModel = task.getResult().toObject(MessageRoomModel.class);
-                if(messageRoomModel==null){
-                    //first time chat
+
+                // If messageRoomModel is null, it means it is a first time chat so it creates a new one
+                if (messageRoomModel == null) {
                     messageRoomModel = new MessageRoomModel(
                             messageRoomId,
-                            Arrays.asList(FirebaseUtil.currentUserId(),otherUserId),
+                            Arrays.asList(FirebaseUtil.currentUserId(), otherUserId),
                             Timestamp.now(),
                             ""
                     );
+
+                    //Saves the new message room model to Firestore
                     FirebaseUtil.getMessageRoomReference(messageRoomId).set(messageRoomModel);
                 }
             }
         });
 
+        // Retrieve the user document corresponding to otherUserId from Firestore
         FirebaseUtil.getUserReference(otherUserId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
+                // Retrieve the other user's name from the document
                 String otherUserName = documentSnapshot.getString("name");
                 if (otherUserName != null) {
+                    // Set the other user's name in the UI
                     otherUsername.setText(otherUserName);
                 } else {
-                    otherUsername.setText(otherUserId); // Set to otherUserId if name is not found
+                    // If name is not found, set it to otherUserId
+                    otherUsername.setText(otherUserId);
                 }
             } else {
-                otherUsername.setText(otherUserId); // Set to otherUserId if user document does not exist
+                // If the user document does not exist, set the UI to otherUserId
+                otherUsername.setText(otherUserId);
             }
         }).addOnFailureListener(e -> {
+            // If there's a failure retrieving the user document, set the UI to otherUserId
             otherUsername.setText(otherUserId); // Set to otherUserId in case of failure
         });
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Call setupMessageView() again in onResume() to ensure it's initialized
+        setupMessageView();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Stop listening for updates when the activity is paused
+        if (messageAdaptor != null) {
+            messageAdaptor.stopListening();
+        }
+    }
 }

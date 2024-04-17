@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(homeFragment);
 
 
-
         //Get fire store instance
         firestore = FirebaseFirestore.getInstance();
 
@@ -138,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment homeFragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.home_container,homeFragment);
+        transaction.replace(R.id.home_container, homeFragment);
         transaction.commit();
     }
 

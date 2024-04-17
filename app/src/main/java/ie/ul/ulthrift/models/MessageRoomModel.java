@@ -4,16 +4,21 @@ import com.google.firebase.Timestamp;
 
 import java.util.List;
 
+// Model for creating a message room
 public class MessageRoomModel {
     String chatroomId;
+
+    // The userIds of the two users in that message room
     List<String> userIds;
     Timestamp lastMessageTimestamp;
     String lastMessageSenderId;
     String lastMessage;
 
+    //Default Constructor
     public MessageRoomModel() {
     }
 
+    // Constructor
     public MessageRoomModel(String chatroomId, List<String> userIds, Timestamp lastMessageTimestamp, String lastMessageSenderId) {
         this.chatroomId = chatroomId;
         this.userIds = userIds;

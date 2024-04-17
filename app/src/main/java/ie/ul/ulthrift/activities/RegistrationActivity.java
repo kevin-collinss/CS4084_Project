@@ -16,14 +16,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,13 +51,13 @@ public class RegistrationActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
 
-        sharedPreferences = getSharedPreferences("onBoardingScreen",MODE_PRIVATE);
-        boolean isFirstTime = sharedPreferences.getBoolean("firstTime",true);
+        sharedPreferences = getSharedPreferences("onBoardingScreen", MODE_PRIVATE);
+        boolean isFirstTime = sharedPreferences.getBoolean("firstTime", true);
 
-        if(isFirstTime){
+        if (isFirstTime) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
 
-            editor.putBoolean("firstTime",false);
+            editor.putBoolean("firstTime", false);
             editor.commit();
 
             Intent intent = new Intent(RegistrationActivity.this, OnBoardingActivity.class);
@@ -137,30 +132,32 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         // if the registration is successful, display that they registered, otherwise display it failed
                         if (task.isSuccessful()) {
+
                             // Get the UID of the newly registered user
                             String userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                             // Create a user object
                             final UserModel user = new UserModel(userName, userEmail, userPassword, userUid);
 
+                            // Add the user to the users collection in the Firestore database
                             firestore.collection("users").document(userUid).set(user)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    Toast.makeText(RegistrationActivity.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
-                                                    startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
-                                                }
-                                            })
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(RegistrationActivity.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(RegistrationActivity.this, MainActivity.class));
+                                        }
+                                    })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(RegistrationActivity.this, "Registration Failed"+task.getException(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(RegistrationActivity.this, "Registration Failed" + task.getException(), Toast.LENGTH_SHORT).show();
 
                                         }
                                     });
 
                         } else {
-                            Toast.makeText(RegistrationActivity.this, "Registration Failed"+task.getException(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, "Registration Failed" + task.getException(), Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -170,8 +167,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
     // Redirects to LoginActivity when the user clicks the sign in button
-    public void signin (View view){
-            startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
+    public void signin(View view) {
+        startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
     }
 
 }

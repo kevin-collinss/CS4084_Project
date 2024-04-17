@@ -1,6 +1,5 @@
 package ie.ul.ulthrift.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,8 +32,6 @@ public class DetailedActivity extends AppCompatActivity {
     ImageView detailedImg;
     TextView name, description, price;
     Button addToFavourites, messageSeller;
-
-    String userId;
 
     // New Products
     NewProductsModel newProductsModel = null;
@@ -95,6 +92,7 @@ public class DetailedActivity extends AppCompatActivity {
             addFavouriteItem();
         });
 
+        // Handle Message Seller Button click
         messageSeller.setOnClickListener(v -> {
             // Create an intent to start the MessageActivity
             Intent intent = new Intent(DetailedActivity.this, MessageActivity.class);
@@ -113,7 +111,7 @@ public class DetailedActivity extends AppCompatActivity {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // Check if user logged in is actually viewing own product
-        if(productUserId.equals(currentUserId)) {
+        if (productUserId.equals(currentUserId)) {
             // Hide both buttons if the user is viewing own listing
             findViewById(R.id.add_to_favourites).setVisibility(View.GONE);
             findViewById(R.id.message_seller).setVisibility(View.GONE);
@@ -175,6 +173,7 @@ public class DetailedActivity extends AppCompatActivity {
         return null;
     }
 
+    //get the userId of who is selling the product whether viewed from ShowALl or NewProducts Colletion
     private String getOtherUserId() {
         if (newProductsModel != null) {
             return newProductsModel.getUserId();

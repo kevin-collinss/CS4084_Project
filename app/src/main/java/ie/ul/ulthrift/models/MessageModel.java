@@ -2,6 +2,7 @@ package ie.ul.ulthrift.models;
 
 import com.google.firebase.Timestamp;
 
+// Model for creating a message
 public class MessageModel {
     private String message;
     private String senderId;
