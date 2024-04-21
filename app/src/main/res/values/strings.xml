@@ -39,7 +39,4 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!-- Google Maps API Key -->
-    <string name="my_map_api_key">AIzaSyAzflbyCQgWfAeqUSs3AD1FVoWKOMPSfrE</string>
-
 </resources>
