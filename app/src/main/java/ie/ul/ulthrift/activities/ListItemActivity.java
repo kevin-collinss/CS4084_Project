@@ -76,7 +76,6 @@ public class ListItemActivity extends AppCompatActivity {
                     }
                 }
         );
-
         // Set  listener for the upload image button
         findViewById(R.id.buttonUploadImage).setOnClickListener(view -> pickImage());
 
