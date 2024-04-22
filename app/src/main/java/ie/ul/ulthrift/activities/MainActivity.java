@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-
     }
 
     @Override
@@ -173,4 +173,5 @@ public class MainActivity extends AppCompatActivity {
         calendar.add(Calendar.DAY_OF_YEAR, -2);
         return calendar.getTime();
     }
+
 }

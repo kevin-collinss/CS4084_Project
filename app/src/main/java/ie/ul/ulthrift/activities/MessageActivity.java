@@ -1,16 +1,26 @@
 package ie.ul.ulthrift.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Query;
 
@@ -35,6 +45,7 @@ public class MessageActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
 
+    private GoogleMap myMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +79,22 @@ public class MessageActivity extends AppCompatActivity {
             sendMessageToUser(message);
         }));
 
+        // Handle drop pin button click
+        ImageButton dropPinButton = findViewById(R.id.dropPinButton);
+        dropPinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create intent to start Google Maps activity
+                Intent intent = new Intent(MessageActivity.this, MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         getOrCreateMessageModel();
         setupMessageView();
+
+        // Find and initialize SupportMapFragment from the layout associated with MapsActivity
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
     //Setting up RecyclerView to display messages
@@ -201,4 +226,6 @@ public class MessageActivity extends AppCompatActivity {
             messageAdaptor.stopListening();
         }
     }
+
+
 }
