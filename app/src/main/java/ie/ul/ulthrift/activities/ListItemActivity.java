@@ -28,6 +28,9 @@ import java.util.Map;
 
 import ie.ul.ulthrift.R;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+
 public class ListItemActivity extends AppCompatActivity {
 
     // UI stuff
@@ -46,6 +49,9 @@ public class ListItemActivity extends AppCompatActivity {
     // Activty launcher for selecting the image
     private ActivityResultLauncher<Intent> imagePickerLauncher;
 
+    private ExecutorService executorService;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +60,8 @@ public class ListItemActivity extends AppCompatActivity {
         // Initialise Firebase Firestore and Storage
         db = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference();
+
+        executorService = Executors.newFixedThreadPool(2);
 
         // Initialise UI Components
         editItemName = findViewById(R.id.editItemName);
@@ -76,7 +84,6 @@ public class ListItemActivity extends AppCompatActivity {
                     }
                 }
         );
-
         // Set  listener for the upload image button
         findViewById(R.id.buttonUploadImage).setOnClickListener(view -> pickImage());
 
@@ -95,33 +102,47 @@ public class ListItemActivity extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(Uri imageUri) {
-        //makes sure item name is entered before trying to upload to db
-        itemName = editItemName.getText().toString().trim();
-        if (itemName.isEmpty()) {
-            Toast.makeText(this, "Please enter the item name first.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Construct a unique file name to avoid name conflicts for images in db
-        String imageName = "images/" + itemName + "_" + System.currentTimeMillis() + ".jpg";
-        StorageReference imageRef = storageRef.child(imageName);
-
-        //start upload to firebase storage
-        UploadTask uploadTask = imageRef.putFile(imageUri);
-        uploadTask.continueWithTask(task -> {
-            if (!task.isSuccessful()) {
-                throw task.getException(); //throws exception if one to throw
+        executorService.execute(() -> {
+            //makes sure item name is entered before trying to upload to db
+            itemName = editItemName.getText().toString().trim();
+            if (itemName.isEmpty()) {
+                runOnUiThread(() -> Toast.makeText(this, "Please enter the item name first.", Toast.LENGTH_SHORT).show());
+                return;
             }
-            return imageRef.getDownloadUrl(); //downlaods image url
-        }).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                itemImageUrl = task.getResult().toString();
-                findViewById(R.id.buttonSubmit).setEnabled(true); // Enable the submit button
-            } else {
-                Toast.makeText(this, "Upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show(); //toast error
-                //message if it fails
-            }
+
+            // Construct a unique file name to avoid name conflicts for images in db
+            String imageName = "images/" + itemName + "_" + System.currentTimeMillis() + ".jpg";
+            StorageReference imageRef = storageRef.child(imageName);
+
+            //start upload to firebase storage
+            UploadTask uploadTask = imageRef.putFile(imageUri);
+            uploadTask.continueWithTask(task -> {
+                if (!task.isSuccessful()) {
+                    //throw exception if not successful
+                    throw task.getException();
+                }
+                // If the upload was successful, get the download URL of uplaoded file to Firebase storeage
+                return imageRef.getDownloadUrl();
+            }).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    itemImageUrl = task.getResult().toString();
+                    // Since this operation affects the UI, it needs to be run on the UI thread
+                    runOnUiThread(() -> findViewById(R.id.buttonSubmit).setEnabled(true));
+                } else {
+                    //If error occurred, display toast message
+                    runOnUiThread(() -> Toast.makeText(this, "Upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show());
+                }
+            });
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        //destroys the thread
+        super.onDestroy();
+        if (executorService != null) {
+            executorService.shutdown();
+        }
     }
 
 
