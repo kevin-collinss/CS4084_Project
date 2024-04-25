@@ -54,10 +54,10 @@ public class FirebaseUtil {
 
     // Generates a chat room ID based on the user IDs in that room
     public static String getChatroomId(String userId1, String userId2) {
-        if (userId1.hashCode() < userId2.hashCode()) {
-            return userId1 + "_" + userId2;
+        if (userId1.compareTo(userId2) < 0) {
+            return userId1 + "+" + userId2;
         } else {
-            return userId2 + "_" + userId1;
+            return userId2 + "+" + userId1;
         }
     }
 
