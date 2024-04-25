@@ -131,8 +131,6 @@ public class HomeFragment extends Fragment {
                             CategoryModel categoryModel = document.toObject(CategoryModel.class);
                             categoryModelList.add(categoryModel);
                             categoryAdaptor.notifyDataSetChanged();
-                            linearLayout.setVisibility(View.VISIBLE);
-                            progressDialog.dismiss();
                             Log.d("FireStore", document.getId() + " => " + document.getData());
                         }
 
@@ -171,6 +169,9 @@ public class HomeFragment extends Fragment {
                         Log.w("Firestore", "Error getting documents.", e);
                     }
                 });
+
+        linearLayout.setVisibility(View.VISIBLE);
+        progressDialog.dismiss();
 
         return root;
 
